@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login/Register Transition Page</title>
+  <link rel="stylesheet" href="/static/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="/src/firebase.js"></script>
+</head>
+
+<body>
+<div class="container" id="container">
+  <div class="image-section" id="image-section">
+    <img src="/static/Login-rafiki.png" id="img1" style="opacity: 1;">
+    <img src="/static/Privacy policy-rafiki.png" id="img2" style="opacity: 0;">
+  </div>
+
+  <div class="form-section" id="form-section">
+    <h2 id="form-title">Welcome Back</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email" id="email-label">Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password" id="password-label">Password</label>
+        <input type="password" id="password" required>
+      </div>
+      <button type="submit" class="btn" id="submit-btn">Login</button>
+      <button type="button" class="toggle-btn" id="toggle">Don't have an account? Register</button>
+    </form>
+    <button type="button" class="btn" style="background: #DB4437;" onclick="googleSignIn()">
+        Sign In with Google
+      </button>
+      
+  </div>
+</div>
+
+<script type="module">
+    
+   // Get all needed elements
+const img1 = document.getElementById('img1');
+const img2 = document.getElementById('img2');
+const container = document.getElementById('container');
+const toggleBtn = document.getElementById('toggle');
+const formTitle = document.getElementById('form-title');
+const submitBtn = document.getElementById('submit-btn');
+const emailLabel = document.getElementById('email-label');
+const passwordLabel = document.getElementById('password-label');
+const loginForm = document.getElementById('loginForm');
+let showingFirst = true;
+let isLogin = true;
+
+// ⭐ Important: Image click switcher
+document.getElementById('image-section').addEventListener('click', () => {
+  if (showingFirst) {
+    img1.style.opacity = 0;
+    img2.style.opacity = 1;
+  } else {
+    img1.style.opacity = 1;
+    img2.style.opacity = 0;
+  }
+  showingFirst = !showingFirst;
+});
+
+// Toggle login/register view
+toggleBtn.addEventListener('click', () => {
+  container.classList.toggle('active');
+  isLogin = !isLogin;
+
+  if (isLogin) {
+    formTitle.innerText = 'Welcome Back';
+    submitBtn.innerText = 'Login';
+    toggleBtn.innerText = "Don't have an account? Register";
+    emailLabel.innerText = 'Email';
+    passwordLabel.innerText = 'Password';
+  } else {
+    formTitle.innerText = 'Create Account';
+    submitBtn.innerText = 'Register';
+    toggleBtn.innerText = "Already have an account? Login";
+    emailLabel.innerText = 'Email';
+    passwordLabel.innerText = 'Password (min 6 chars)';
+  }
+
+  // ⭐ Also switch images when toggling login/register
+  if (showingFirst) {
+    img1.style.opacity = 0;
+    img2.style.opacity = 1;
+  } else {
+    img1.style.opacity = 1;
+    img2.style.opacity = 0;
+  }
+  showingFirst = !showingFirst;
+});
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+  
+      if(isLogin){
+        auth.signInWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            alert('Logged in successfully!');
+          })
+          .catch((error) => {
+            alert('Error: ' + error.message);
+          });
+      } else {
+        auth.createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            alert('Registered successfully!');
+            // Maybe redirect to dashboard
+          })
+          .catch((error) => {
+            alert('Error: ' + error.message);
+          });
+      }
+    });
+  
+    function googleSignIn() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          alert('Logged in with Google!');
+        })
+        .catch((error) => {
+          alert('Google Sign-In Error: ' + error.message);
+        });
+    }
+  </script>
+  
+ 
+</body>
+</html>

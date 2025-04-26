@@ -1,0 +1,113 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      overflow: hidden;
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      background: rgb(219, 247, 255);
+      display: flex;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      overflow: hidden;
+      position: relative;
+      transition: background 0.5s;
+      border: 2px solid rgb(167, 230, 255);
+    }
+    .image-section {
+      flex: 1;
+      position: relative;
+      background: #f0f0f0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 1s ease-in-out;
+      
+    }
+    .image-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      transition: opacity 1s ease-in-out;
+    }
+    .form-section {
+
+      flex: 1;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: transform 1s ease-in-out;
+    }
+    .form-section h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    .btn {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      background: #667eea;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #5a67d8;
+    }
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      color: #764ba2;
+      font-weight: bold;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+
+    .container.active .image-section {
+      transform: translateX(120%);
+    }
+    .container.active .form-section {
+      transform: translateX(-80%);
+    }
+    .container.active {
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    }
+
+    @media(max-width: 768px){
+      .container {
+        flex-direction: column;
+      }
+      .image-section {
+        height: 250px;
+      }
+    }
