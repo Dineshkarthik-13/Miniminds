@@ -1,0 +1,112 @@
+<!-- activity.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity | MiniMinds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: linear-gradient(135deg, #667eea, #764ba2); min-height: 100vh; display: flex; flex-direction: column; }
+
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .logo-area { display: flex; align-items: center; }
+    .logo-area img { width: 40px; margin-right: 10px; }
+    .logo-area h1 { font-size: 1.5rem; color: white; }
+    .logout-btn { padding: 10px 20px; background: white; color: #764ba2; border-radius: 25px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; }
+    .logout-btn:hover { background: #eee; }
+
+    .dashboard { flex: 1; padding: 2rem; display: grid; grid-template-columns: 250px 1fr; gap: 2rem; }
+
+    .sidebar { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 1.5rem; }
+    .sidebar a { display: flex; align-items: center; color: white; text-decoration: none; font-weight: 500; transition: 0.3s; }
+    .sidebar a.active { color: #ffd700; }
+    .sidebar a:hover { color: #ddd; }
+    .sidebar a svg { margin-right: 10px; }
+
+    .content { background: white; border-radius: 20px; padding: 3rem; color: #333; box-shadow: 0 8px 20px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
+    .content::before { content: ""; position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; background: radial-gradient(#7e5bef, transparent); z-index: 0; border-radius: 50%; opacity: 0.3; }
+
+    .content h2 { font-size: 2rem; margin-bottom: 1.5rem; position: relative; z-index: 1; }
+
+    .activity-list { display: flex; flex-direction: column; gap: 1rem; position: relative; z-index: 1; }
+    .activity-item { display: flex; align-items: center; gap: 1rem; background: rgba(118,75,162,0.1); padding: 1rem; border-radius: 12px; transition: background 0.3s; }
+    .activity-item:hover { background: rgba(118,75,162,0.2); }
+    .activity-item svg { color: #764ba2; }
+    .activity-info { display: flex; flex-direction: column; }
+    .activity-title { font-weight: 600; font-size: 1.1rem; }
+    .activity-time { font-size: 0.9rem; opacity: 0.7; }
+
+    @media(max-width: 900px) { .dashboard { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo-area">
+    <img src="/static/brain organ-rafiki.png" alt="logo">
+    <h1>MiniMinds</h1>
+  </div>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</nav>
+
+<div class="dashboard">
+  <div class="sidebar">
+    <a href="dashboard.html"><i data-lucide="home"></i> Home</a>
+    <a href="profile.html"><i data-lucide="user"></i> Profile</a>
+    <a href="activity.html" class="active"><i data-lucide="activity"></i> Activity</a>
+    <a href="settings.html"><i data-lucide="settings"></i> Settings</a>
+  </div>
+
+  <div class="content">
+    <h2>Recent Activities</h2>
+    <div class="activity-list" id="activity-list">
+      <!-- Dynamic activities will go here -->
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { auth } from './src/firebase.js';
+
+  const activities = [
+    { title: "Logged in", time: "Just now", icon: "log-in" },
+    { title: "Updated Profile", time: "10 minutes ago", icon: "user-check" },
+    { title: "Completed Data Science Challenge", time: "2 hours ago", icon: "check-circle" },
+    { title: "Logged out", time: "Yesterday", icon: "log-out" }
+  ];
+
+  function renderActivities() {
+    const list = document.getElementById('activity-list');
+    activities.forEach(act => {
+      const item = document.createElement('div');
+      item.className = 'activity-item';
+      item.innerHTML = `<i data-lucide="${act.icon}"></i>
+        <div class="activity-info">
+          <div class="activity-title">${act.title}</div>
+          <div class="activity-time">${act.time}</div>
+        </div>`;
+      list.appendChild(item);
+    });
+    lucide.createIcons();
+  }
+
+  auth.onAuthStateChanged((user) => {
+    if (!user) {
+      window.location.href = "login.html";
+    } else {
+      renderActivities();
+    }
+  });
+
+  function logout() {
+    auth.signOut().then(() => {
+      window.location.href = "login.html";
+    });
+  }
+</script>
+
+</body>
+</html>

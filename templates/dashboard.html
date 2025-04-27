@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | MiniMinds</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+
+<body>
+
+<nav>
+  <div class="logo-area">
+    <img src="/static/brain organ-rafiki.png" alt="logo">
+    <h1>MiniMinds</h1>
+  </div>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</nav>
+
+<div class="dashboard">
+  <div class="sidebar">
+    <a href="#"><i data-lucide="home"></i> Home</a>
+    <a href="#"><i data-lucide="user"></i> Profile</a>
+    <a href="#"><i data-lucide="activity"></i> Activity</a>
+    <a href="#"><i data-lucide="settings"></i> Settings</a>
+  </div>
+
+  <div class="content">
+    <h2 id="welcome-text">Welcome 👋</h2>
+    <p id="email-text">Loading user...</p>
+  </div>
+</div>
+
+<script type="module">
+  import { auth } from './src/firebase.js';
+
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      document.getElementById('welcome-text').innerText = `Hello, ${user.displayName || 'User'}!`;
+      document.getElementById('email-text').innerText = `Email: ${user.email}`;
+    } else {
+      window.location.href = "login.html";
+    }
+  });
+
+  function logout() {
+    auth.signOut().then(() => {
+      window.location.href = "login.html";
+    });
+  }
+
+  lucide.createIcons();
+</script>
+
+</body>
+</html>
